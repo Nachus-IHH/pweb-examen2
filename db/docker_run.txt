@@ -1,0 +1,11 @@
+-- Hernandez Hernandez Ignacio - 23200144
+-- Lara Cruz Brandon Javier - 23200146
+-- Santiago Padilla Rubén - 23200158
+
+sudo docker run --name contenedor_exa2 \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=bd_almacen \
+  -p 3307:3306 \
+  -d mysql:8.0
+
+sudo docker exec -it contenedor_dba mysql -u root -proot
