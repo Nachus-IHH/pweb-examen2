@@ -7,7 +7,7 @@
 // Seguridad: solo usuarios con sesión iniciada.
 
 $cliente = require 'config_soap.php';
-
+// Seguridad: solo usuarios con sesión iniciada.
 if (!isset($_SESSION['nomUsuario'])) {
     echo "<script>
         alert('Acceso denegado. Debes iniciar sesión.');
@@ -36,162 +36,297 @@ try {
 
 <style>
     .ml-catalogo {
+        --ml-amarillo: #FFE600;
+        --ml-azul: #3483FA;
+        --ml-texto: #2b2b2b;
+        --ml-gris: #6b6b6b;
         max-width: 1500px;
         width: 96%;
         margin: 0 auto;
         padding: 25px 0 15px;
     }
 
+    /* ---------- ENCABEZADO ---------- */
     .ml-encabezado {
-        background: #FFE600;
-        border-radius: 12px;
-        padding: 22px;
-        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #FFE600 0%, #FFD500 60%, #FFC800 100%);
+        border-radius: 18px;
+        padding: 30px 32px;
+        margin-bottom: 26px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 15px;
         flex-wrap: wrap;
+        box-shadow: 0 8px 24px rgba(255, 200, 0, .35);
     }
 
+    /* círculos decorativos */
+    .ml-encabezado::before,
+    .ml-encabezado::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .25);
+        pointer-events: none;
+    }
+
+    .ml-encabezado::before { width: 220px; height: 220px; top: -90px; right: 120px; }
+    .ml-encabezado::after  { width: 130px; height: 130px; bottom: -60px; left: 38%; }
+
+    .ml-encabezado > * { position: relative; z-index: 1; }
+
     .ml-encabezado h1 {
-        color: #333333;
-        font-size: 28px;
-        font-weight: 750;
+        color: var(--ml-texto);
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -.5px;
         margin: 0;
     }
 
     .ml-encabezado p {
-        color: #333333;
-        margin: 5px 0 0;
+        color: var(--ml-texto);
+        opacity: .8;
+        margin: 6px 0 0;
+        font-size: 16px;
     }
 
     .ml-marca {
-        width: 90px;
-        height: 65px;
+        width: 100px;
+        height: 72px;
         object-fit: contain;
+        background: #fff;
+        padding: 8px;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+    }
+
+    /* ---------- BARRA: CONTADOR + BUSCADOR ---------- */
+    .ml-barra {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
     }
 
     .ml-subtitulo {
-        color: #555555;
-        margin-bottom: 20px;
+        color: var(--ml-gris);
+        margin: 0;
+        font-size: 15px;
     }
 
+    .ml-subtitulo strong {
+        color: var(--ml-texto);
+        background: #fff7a8;
+        padding: 2px 10px;
+        border-radius: 20px;
+    }
+
+    .ml-buscador {
+        flex: 0 1 380px;
+        width: 100%;
+        padding: 11px 18px;
+        border: 1px solid #ddd;
+        border-radius: 30px;
+        font-size: 14px;
+        outline: none;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+        transition: border-color .2s, box-shadow .2s;
+    }
+
+    .ml-buscador:focus {
+        border-color: var(--ml-azul);
+        box-shadow: 0 0 0 4px rgba(52, 131, 250, .15);
+    }
+
+    /* ---------- GRID ---------- */
     .ml-grid {
         display: grid;
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 18px;
     }
 
     .ml-card {
         min-width: 0;
         overflow: hidden;
         background: #ffffff;
-        border: 1px solid #e5e5e5;
-        border-radius: 10px;
-        box-shadow: 0 2px 7px rgba(0, 0, 0, .06);
-        transition: transform .2s, box-shadow .2s;
+        border: 1px solid #ececec;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s;
+        animation: ml-aparece .5s ease both;
     }
 
     .ml-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 18px rgba(0, 0, 0, .12);
+        transform: translateY(-6px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, .14);
+        border-color: var(--ml-amarillo);
+    }
+
+    @keyframes ml-aparece {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
     .ml-foto-link {
-        height: 155px;
+        position: relative;
+        height: 185px;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 10px;
-        background: #ffffff;
-        border-bottom: 1px solid #eeeeee;
+        padding: 14px;
+        background: radial-gradient(circle at center, #ffffff 40%, #f6f6f6 100%);
+        border-bottom: 1px solid #f0f0f0;
+        color: #aaa;
+        font-size: 13px;
+        text-decoration: none;
     }
 
     .ml-foto {
         width: 100%;
         height: 100%;
         object-fit: contain;
+        transition: transform .3s ease;
     }
 
+    .ml-card:hover .ml-foto {
+        transform: scale(1.08);
+    }
+
+    /* texto "Ver imagen" al pasar el mouse */
+    a.ml-foto-link::after {
+        content: "🔍 Ver imagen";
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translate(-50%, 8px);
+        background: var(--ml-azul);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 20px;
+        opacity: 0;
+        transition: opacity .25s, transform .25s;
+        white-space: nowrap;
+    }
+
+    .ml-card:hover a.ml-foto-link::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    /* ---------- INFO ---------- */
     .ml-info {
-        padding: 12px;
+        padding: 14px 16px 18px;
     }
 
     .ml-clave {
-        font-size: 12px;
-        color: #777777;
-        margin-bottom: 6px;
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .4px;
+        text-transform: uppercase;
+        color: var(--ml-azul);
+        background: #eaf2ff;
+        padding: 3px 9px;
+        border-radius: 20px;
+        margin-bottom: 9px;
     }
 
     .ml-nombre {
-        color: #333333;
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: 8px;
+        color: var(--ml-texto);
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 6px;
         overflow-wrap: anywhere;
     }
 
     .ml-descripcion {
-        color: #666666;
+        color: var(--ml-gris);
         font-size: 13px;
-        min-height: 55px;
+        line-height: 1.45;
+        min-height: 56px;
         overflow-wrap: anywhere;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .ml-precio {
-        color: #222222;
-        font-size: 21px;
+        color: var(--ml-texto);
+        font-size: 26px;
         font-weight: 700;
-        margin-top: 10px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #e3e3e3;
     }
 
-    .ml-vacio, .ml-error {
-        padding: 22px;
-        border-radius: 10px;
+    .ml-precio sup {
+        font-size: 13px;
+        font-weight: 600;
+        margin-left: 2px;
+        position: relative;
+        top: -3px;
+    }
+
+    /* ---------- ESTADOS ---------- */
+    .ml-vacio, .ml-error, .ml-sin-resultados {
+        padding: 30px;
+        border-radius: 14px;
         text-align: center;
         margin-bottom: 20px;
     }
 
-    .ml-vacio {
+    .ml-vacio, .ml-sin-resultados {
         background: #f5f5f5;
         color: #555555;
     }
 
+    .ml-sin-resultados { display: none; }
+
     .ml-error {
         background: #fff0f0;
         color: #a32020;
+        border: 1px solid #f5c2c2;
     }
 
-    @media (max-width: 1200px) {
-        .ml-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
+    /* ---------- PIE ---------- */
+    .ml-pie-equipo {
+        text-align: center;
+        background: linear-gradient(135deg, #333333, #1f1f1f);
+        color: #ffffff;
+        border-radius: 16px;
+        padding: 24px 12px;
+        margin-top: 40px;
+        line-height: 1.8;
+        border-bottom: 4px solid var(--ml-amarillo);
     }
 
-    @media (max-width: 850px) {
-        .ml-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
+    .ml-pie-equipo h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
     }
 
+    .ml-pie-equipo p {
+        font-size: 13px;
+        margin: 0;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
     @media (max-width: 550px) {
-        .ml-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .ml-foto-link {
-            height: 125px;
-        }
-
-        .ml-encabezado h1 {
-            font-size: 23px;
-        }
-
-        .ml-precio {
-            font-size: 18px;
-        }
+        .ml-encabezado { padding: 22px 18px; }
+        .ml-encabezado h1 { font-size: 25px; }
+        .ml-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+        .ml-foto-link { height: 130px; }
+        .ml-precio { font-size: 21px; }
+        .ml-buscador { flex-basis: 100%; }
     }
 </style>
 
@@ -210,9 +345,21 @@ try {
         >
     </header>
 
-    <p class="ml-subtitulo">
-        Productos registrados: <?php echo count($datos); ?>
-    </p>
+    <div class="ml-barra">
+        <p class="ml-subtitulo">
+            Productos registrados: <strong id="mlContador"><?php echo count($datos); ?></strong>
+        </p>
+
+        <?php if (!empty($datos)) { ?>
+            <input
+                type="search"
+                id="mlBuscador"
+                class="ml-buscador"
+                placeholder="🔎 Buscar producto..."
+                autocomplete="off"
+            >
+        <?php } ?>
+    </div>
 
     <?php if ($errorProductos !== '') { ?>
 
@@ -229,16 +376,20 @@ try {
 
     <?php } else { ?>
 
+        <div class="ml-sin-resultados" id="mlSinResultados">
+            No se encontraron productos con esa búsqueda.
+        </div>
+
         <div class="ml-grid">
 
             <?php foreach ($datos as $producto) { ?>
 
                 <?php
-                $clave = $producto["CVE"] ?? '';
-                $nombre = $producto['NOM'] ?? 'Producto';
-                $descripcion = $producto['DES'] ?? '';
-                $precio = (float) ($producto['PRE'] ?? 0);
-                $foto = trim($producto['FOT'] ?? '');
+                $clave = $producto['PRO_CVE'] ?? '';
+                $nombre = $producto['PRO_NOMBRE'] ?? 'Producto';
+                $descripcion = $producto['PRO_DESCRIPCION'] ?? '';
+                $precio = (float) ($producto['PRO_PRECIO'] ?? 0);
+                $foto = trim($producto['PRO_FOTO'] ?? '');
 
                 // Si MySQL guarda solamente el nombre del archivo,
                 // agregar la carpeta donde se encuentran las imágenes.
@@ -248,9 +399,18 @@ try {
 
                 // Si no hay fotografía registrada, no inventar una ruta.
                 $tieneFoto = $foto !== '';
+
+                // Precio separado: entero y centavos (para mostrar los centavos pequeños).
+                $partesPrecio = explode('.', number_format($precio, 2, '.', ','));
+
+                // Texto en minúsculas para el buscador.
+                $busqueda = mb_strtolower($clave . ' ' . $nombre . ' ' . $descripcion, 'UTF-8');
                 ?>
 
-                <article class="ml-card">
+                <article
+                    class="ml-card"
+                    data-busqueda="<?php echo htmlspecialchars($busqueda, ENT_QUOTES, 'UTF-8'); ?>"
+                >
 
                     <?php if ($tieneFoto) { ?>
 
@@ -292,7 +452,7 @@ try {
                         </div>
 
                         <div class="ml-precio">
-                            $<?php echo number_format($precio, 2); ?>
+                            $<?php echo $partesPrecio[0]; ?><sup><?php echo $partesPrecio[1]; ?></sup>
                         </div>
 
                     </div>
@@ -303,4 +463,31 @@ try {
         </div>
 
     <?php } ?>
+
 </div>
+
+<script>
+    // Buscador en vivo (filtra por clave, nombre y descripción).
+    (function () {
+        var buscador = document.getElementById('mlBuscador');
+        if (!buscador) return;
+
+        var tarjetas = document.querySelectorAll('.ml-card');
+        var contador = document.getElementById('mlContador');
+        var sinResultados = document.getElementById('mlSinResultados');
+
+        buscador.addEventListener('input', function () {
+            var texto = buscador.value.trim().toLowerCase();
+            var visibles = 0;
+
+            tarjetas.forEach(function (tarjeta) {
+                var coincide = tarjeta.dataset.busqueda.indexOf(texto) !== -1;
+                tarjeta.style.display = coincide ? '' : 'none';
+                if (coincide) visibles++;
+            });
+
+            contador.textContent = visibles;
+            sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+        });
+    })();
+</script>

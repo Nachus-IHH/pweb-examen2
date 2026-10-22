@@ -73,25 +73,24 @@ class clsservicios
             if ($renglon && mysqli_num_rows($renglon) > 0) {
                 $i = 0;
                 while ($resultado = mysqli_fetch_assoc($renglon)) {
-                    $datos[$i]["BAN"] = "1";
-                    $datos[$i]["CVE"] = $resultado["clave"];
-                    $datos[$i]["NOM"] = $resultado["nombre"];
-                    $datos[$i]["DES"] = $resultado["descripcion"];
-                    $datos[$i]["PRE"] = $resultado["precio"];
-                    $datos[$i]["CAN"] = $resultado["cantidad"];
-                    $datos[$i]["ACT"] = $resultado["activo"];
-                    $datos[$i]["FOT"] = $resultado["foto"];
-                    $datos[$i]["EST"] = $resultado["estatus"];
-                    $datos[$i]["FEC"] = $resultado["fecha_registro"];
+                    $datos[$i]["PRO_CVE"]         = $resultado["clave"];
+                    $datos[$i]["PRO_NOMBRE"]      = $resultado["nombre"];
+                    $datos[$i]["PRO_DESCRIPCION"] = $resultado["descripcion"];
+                    $datos[$i]["PRO_PRECIO"]      = $resultado["precio"];
+                    $datos[$i]["PRO_CANTIDAD"]    = $resultado["cantidad"];
+                    $datos[$i]["PRO_ACTIVO"]      = $resultado["activo"];
+                    $datos[$i]["PRO_FOTO"]        = $resultado["foto"];
+                    $datos[$i]["PRO_ESTATUS"]     = $resultado["estatus"];
+                    $datos[$i]["PRO_FECHA_REGISTRO"] = $resultado["fecha_registro"];
                     $i++;
                 }
             } else {
-                $datos[0]["BAN"] = "0"; // sin registros
+                $datos[0]["BAN"] = "0";
             }
 
             mysqli_close($conn);
         } else {
-            $datos[0]["BAN"] = "-1"; // error de conexión
+            $datos[0]["BAN"] = "-1";
         }
 
         return $datos;
